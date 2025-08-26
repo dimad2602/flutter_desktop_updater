@@ -263,6 +263,8 @@ class _UpdateCardState extends State<UpdateCard> {
                             else
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
                                   FilledButton.icon(
                                     icon: const Icon(Icons.download),
@@ -273,7 +275,7 @@ class _UpdateCardState extends State<UpdateCard> {
                                     onPressed: notifier?.downloadUpdate,
                                   ),
                                   const SizedBox(
-                                    width: 8,
+                                    height: 8,
                                   ),
                                   if ((notifier?.isMandatory ?? false) == false)
                                     OutlinedButton.icon(
@@ -287,6 +289,9 @@ class _UpdateCardState extends State<UpdateCard> {
                                         notifier?.makeSkipUpdate();
                                       },
                                     ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
                                 ],
                               ),
                             // Release notes
