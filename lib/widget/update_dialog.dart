@@ -288,7 +288,7 @@ class UpdateDialogWidget extends StatelessWidget {
                     ],
                   )
                 else
-                  Row(
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       if ((notifier.isMandatory) == false)
