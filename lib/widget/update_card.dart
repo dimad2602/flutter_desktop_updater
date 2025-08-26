@@ -261,7 +261,7 @@ class _UpdateCardState extends State<UpdateCard> {
                                 },
                               )
                             else
-                              Row(
+                              Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   FilledButton.icon(
