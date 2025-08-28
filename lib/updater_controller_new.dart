@@ -17,8 +17,8 @@ class DesktopUpdaterControllerNew extends ChangeNotifier {
     }
   }
 
-  DesktopUpdaterControllerNew? localization;
-  DesktopUpdaterControllerNew? get getLocalization => localization;
+  DesktopUpdateLocalization? localization;
+  DesktopUpdateLocalization? get getLocalization => localization;
 
   String? _appName;
   String? get appName => _appName;

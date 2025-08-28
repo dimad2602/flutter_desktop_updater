@@ -1,3 +1,4 @@
+import "package:desktop_updater/desktop_updater.dart";
 import "package:desktop_updater/updater_controller_new.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";

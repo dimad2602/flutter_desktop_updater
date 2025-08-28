@@ -1,6 +1,4 @@
-import "package:desktop_updater/updater_controller.dart";
 import "package:desktop_updater/updater_controller_new.dart";
-import "package:desktop_updater/widget/update_dialog.dart";
 import "package:desktop_updater/widget/update_dialog_new.dart";
 import "package:flutter/material.dart";
 
