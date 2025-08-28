@@ -3,6 +3,7 @@ import "package:desktop_updater/updater_controller_new.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 
+//TODO: Добавить локализацию
 class UpdateDialogListenerNew extends StatefulWidget {
   const UpdateDialogListenerNew({
     super.key,
@@ -36,7 +37,8 @@ class UpdateDialogListenerNew extends StatefulWidget {
   final Color? buttonIconColor;
 
   @override
-  State<UpdateDialogListenerNew> createState() => _UpdateDialogListenerNewState();
+  State<UpdateDialogListenerNew> createState() =>
+      _UpdateDialogListenerNewState();
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -181,39 +183,34 @@ class UpdateDialogWidgetNew extends StatelessWidget {
                   color: textColor,
                 ),
               ),
-              content: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width * 0.7,
-                ),
-                child: Text(
-                  "${getLocalizedString(
-                        notifier.getLocalization?.newVersionAvailableText,
-                        [
-                          notifier.appName,
-                          notifier.appVersion,
-                        ],
-                      ) ?? (getLocalizedString(
-                        "{} {} is available",
-                        [
-                          notifier.appName,
-                          notifier.appVersion,
-                        ],
-                      )) ?? ""}, ${getLocalizedString(
-                        notifier.getLocalization?.newVersionLongText,
-                        [
-                          ((notifier.downloadSize ?? 0) / 1024)
-                              .toStringAsFixed(2),
-                        ],
-                      ) ?? (getLocalizedString(
-                        "New version is ready to download, click the button below to start downloading. This will download {} MB of data.",
-                        [
-                          ((notifier.downloadSize ?? 0) / 1024)
-                              .toStringAsFixed(2),
-                        ],
-                      )) ?? ""}",
-                  style: TextStyle(
-                    color: buttonTextColor,
-                  ),
+              content: Text(
+                "${getLocalizedString(
+                      notifier.getLocalization?.newVersionAvailableText,
+                      [
+                        notifier.appName,
+                        notifier.appVersion,
+                      ],
+                    ) ?? (getLocalizedString(
+                      "{} {} is available",
+                      [
+                        notifier.appName,
+                        notifier.appVersion,
+                      ],
+                    )) ?? ""}, ${getLocalizedString(
+                      notifier.getLocalization?.newVersionLongText,
+                      [
+                        ((notifier.downloadSize ?? 0) / 1024)
+                            .toStringAsFixed(2),
+                      ],
+                    ) ?? (getLocalizedString(
+                      "New version is ready to download, click the button below to start downloading. This will download {} MB of data.",
+                      [
+                        ((notifier.downloadSize ?? 0) / 1024)
+                            .toStringAsFixed(2),
+                      ],
+                    )) ?? ""}",
+                style: TextStyle(
+                  color: buttonTextColor,
                 ),
               ),
               actions: [
