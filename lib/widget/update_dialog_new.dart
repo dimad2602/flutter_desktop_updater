@@ -1,10 +1,9 @@
-import "package:desktop_updater/desktop_updater.dart";
-import "package:desktop_updater/updater_controller.dart";
+import "package:desktop_updater/updater_controller_new.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 
-class UpdateDialogListener extends StatefulWidget {
-  const UpdateDialogListener({
+class UpdateDialogListenerNew extends StatefulWidget {
+  const UpdateDialogListenerNew({
     super.key,
     required this.controller,
     this.backgroundColor,
@@ -15,7 +14,7 @@ class UpdateDialogListener extends StatefulWidget {
     this.buttonIconColor,
   });
 
-  final DesktopUpdaterController controller;
+  final DesktopUpdaterControllerNew controller;
 
   /// The background color of the dialog. if null, it will use Theme.of(context).colorScheme.surfaceContainerHigh,
   final Color? backgroundColor;
@@ -36,13 +35,13 @@ class UpdateDialogListener extends StatefulWidget {
   final Color? buttonIconColor;
 
   @override
-  State<UpdateDialogListener> createState() => _UpdateDialogListenerState();
+  State<UpdateDialogListenerNew> createState() => _UpdateDialogListenerNewState();
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(
-      DiagnosticsProperty<DesktopUpdaterController>(
+      DiagnosticsProperty<DesktopUpdaterControllerNew>(
         "controller",
         controller,
       ),
@@ -56,7 +55,7 @@ class UpdateDialogListener extends StatefulWidget {
   }
 }
 
-class _UpdateDialogListenerState extends State<UpdateDialogListener> {
+class _UpdateDialogListenerNewState extends State<UpdateDialogListenerNew> {
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
@@ -73,7 +72,7 @@ class _UpdateDialogListenerState extends State<UpdateDialogListener> {
               context: context,
               barrierDismissible: widget.controller.isMandatory == false,
               builder: (context) {
-                return UpdateDialogWidget(
+                return UpdateDialogWidgetNew(
                   controller: widget.controller,
                   backgroundColor: widget.backgroundColor,
                   iconColor: widget.iconColor,
@@ -95,7 +94,7 @@ class _UpdateDialogListenerState extends State<UpdateDialogListener> {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(
-      DiagnosticsProperty<DesktopUpdaterController>(
+      DiagnosticsProperty<DesktopUpdaterControllerNew>(
         "controller",
         widget.controller,
       ),
@@ -109,7 +108,7 @@ class _UpdateDialogListenerState extends State<UpdateDialogListener> {
 /// Shows an update dialog.
 Future showUpdateDialog<T>(
   BuildContext context, {
-  required DesktopUpdaterController controller,
+  required DesktopUpdaterControllerNew controller,
   Color? backgroundColor,
   Color? iconColor,
   Color? shadowColor,
@@ -118,7 +117,7 @@ Future showUpdateDialog<T>(
     context: context,
     // barrierDismissible: controller.isMandatory == false,
     builder: (context) {
-      return UpdateDialogWidget(
+      return UpdateDialogWidgetNew(
         controller: controller,
         backgroundColor: backgroundColor,
         iconColor: iconColor,
@@ -129,11 +128,11 @@ Future showUpdateDialog<T>(
 }
 
 /// A widget that shows an update dialog.
-class UpdateDialogWidget extends StatelessWidget {
+class UpdateDialogWidgetNew extends StatelessWidget {
   /// Creates an update dialog widget.
-  const UpdateDialogWidget({
+  const UpdateDialogWidgetNew({
     super.key,
-    required DesktopUpdaterController controller,
+    required DesktopUpdaterControllerNew controller,
     this.backgroundColor,
     this.iconColor,
     this.shadowColor,
@@ -143,7 +142,7 @@ class UpdateDialogWidget extends StatelessWidget {
   }) : notifier = controller;
 
   /// The controller for the update dialog.
-  final DesktopUpdaterController notifier;
+  final DesktopUpdaterControllerNew notifier;
 
   /// The background color of the dialog. if null, it will use Theme.of(context).colorScheme.surfaceContainerHigh,
   final Color? backgroundColor;
@@ -344,7 +343,7 @@ class UpdateDialogWidget extends StatelessWidget {
     super.debugFillProperties(properties);
     properties
       ..add(
-        DiagnosticsProperty<DesktopUpdaterController>("notifier", notifier),
+        DiagnosticsProperty<DesktopUpdaterControllerNew>("notifier", notifier),
       )
       ..add(ColorProperty("backgroundColor", backgroundColor))
       ..add(ColorProperty("iconColor", iconColor))
