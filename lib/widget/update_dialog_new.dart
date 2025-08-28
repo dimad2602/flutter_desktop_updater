@@ -179,155 +179,104 @@ class UpdateDialogWidgetNew extends StatelessWidget {
               title: Text(
                 notifier.getLocalization?.updateAvailableText ??
                     "Update Available",
-                style: TextStyle(
-                  color: textColor,
-                ),
+                style: TextStyle(color: textColor),
               ),
-              content: Text(
-                "${getLocalizedString(
-                      notifier.getLocalization?.newVersionAvailableText,
-                      [
-                        notifier.appName,
-                        notifier.appVersion,
-                      ],
-                    ) ?? (getLocalizedString(
-                      "{} {} is available",
-                      [
-                        notifier.appName,
-                        notifier.appVersion,
-                      ],
-                    )) ?? ""}, ${getLocalizedString(
-                      notifier.getLocalization?.newVersionLongText,
-                      [
-                        ((notifier.downloadSize ?? 0) / 1024)
-                            .toStringAsFixed(2),
-                      ],
-                    ) ?? (getLocalizedString(
-                      "New version is ready to download, click the button below to start downloading. This will download {} MB of data.",
-                      [
-                        ((notifier.downloadSize ?? 0) / 1024)
-                            .toStringAsFixed(2),
-                      ],
-                    )) ?? ""}",
-                style: TextStyle(
-                  color: buttonTextColor,
-                ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "${getLocalizedString(
+                          notifier.getLocalization?.newVersionAvailableText,
+                          [notifier.appName, notifier.appVersion],
+                        ) ?? "${notifier.appName} ${notifier.appVersion} is available"}, "
+                    "${getLocalizedString(
+                          notifier.getLocalization?.newVersionLongText,
+                          [
+                            ((notifier.downloadSize ?? 0) / 1024)
+                                .toStringAsFixed(2)
+                          ],
+                        ) ?? "New version ready, download size ~${((notifier.downloadSize ?? 0) / 1024).toStringAsFixed(2)} MB"}",
+                    style: TextStyle(color: textColor),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Прогресс загрузки
+                  if (notifier.isDownloading && !notifier.isDownloaded) ...[
+                    LinearProgressIndicator(value: notifier.downloadProgress),
+                    const SizedBox(height: 8),
+                    Text(
+                      "${((notifier.downloadProgress) * 100).toInt()}% "
+                      "(${((notifier.downloadedSize) / 1024).toStringAsFixed(2)} MB / "
+                      "${((notifier.downloadSize ?? 0.0) / 1024).toStringAsFixed(2)} MB)",
+                      style: TextStyle(fontSize: 12, color: textColor),
+                    ),
+                  ],
+                  if (notifier.downloadError) ...[
+                    //TODO: Локализация
+                    const Text(
+                      "Download failed. Please try again.",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+
+                  // Кнопка перезапуска после загрузки
+                  if (!notifier.isDownloading && notifier.isDownloaded)
+                    Text(
+                      notifier.getLocalization?.restartText ??
+                          "Update downloaded. Please restart to apply.",
+                      style: TextStyle(color: textColor),
+                    ),
+                ],
               ),
               actions: [
-                if ((notifier.isDownloading) && !(notifier.isDownloaded))
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton.icon(
-                        icon: SizedBox(
-                          height: 18,
-                          width: 18,
-                          child: CircularProgressIndicator(
-                            value: notifier.downloadProgress,
-                          ),
-                        ),
-                        label: Row(
-                          children: [
-                            Text(
-                              "${((notifier.downloadProgress) * 100).toInt()}% (${((notifier.downloadedSize) / 1024).toStringAsFixed(2)} MB / ${((notifier.downloadSize ?? 0.0) / 1024).toStringAsFixed(2)} MB)",
-                            ),
-                          ],
-                        ),
-                        onPressed: null,
-                      ),
-                    ],
+                if (notifier.downloadError)
+                  TextButton.icon(
+                    icon: Icon(Icons.refresh, color: buttonIconColor),
+                    label:
+                        Text("Retry", style: TextStyle(color: buttonTextColor)),
+                    onPressed: notifier.downloadUpdate,
                   )
-                else if (notifier.isDownloading == false &&
-                    (notifier.isDownloaded))
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton.icon(
-                        icon: const Icon(Icons.restart_alt),
-                        label: Text(
-                          notifier.getLocalization?.restartText ??
-                              "Restart to update",
-                        ),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: Text(
-                                  notifier.getLocalization?.warningTitleText ??
-                                      "Are you sure?",
-                                ),
-                                content: Text(
-                                  notifier.getLocalization
-                                          ?.restartWarningText ??
-                                      "A restart is required to complete the update installation.\nAny unsaved changes will be lost. Would you like to restart now?",
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text(
-                                      notifier.getLocalization
-                                              ?.warningCancelText ??
-                                          "Not now",
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: notifier.restartApp,
-                                    child: Text(
-                                      notifier.getLocalization
-                                              ?.warningConfirmText ??
-                                          "Restart",
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    ],
+                else if (notifier.isDownloading && !notifier.isDownloaded)
+                  TextButton.icon(
+                    icon: const Icon(Icons.close),
+                    label: Text(
+                      notifier.getLocalization?.warningCancelText ?? "Cancel",
+                      style: TextStyle(color: buttonTextColor),
+                    ),
+                    onPressed: notifier.makeSkipUpdate,
                   )
-                else
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      if ((notifier.isMandatory) == false)
-                        TextButton.icon(
-                          icon: Icon(
-                            Icons.close,
-                            color: buttonIconColor,
-                          ),
-                          label: Text(
-                            notifier.getLocalization?.skipThisVersionText ??
-                                "Skip this version",
-                            style: TextStyle(
-                              color: buttonTextColor,
-                            ),
-                          ),
-                          onPressed: notifier.makeSkipUpdate,
-                        ),
-                      if ((notifier.isMandatory) == false)
-                        const SizedBox(
-                          width: 8,
-                        ),
-                      TextButton.icon(
-                        icon: Icon(
-                          Icons.download,
-                          color: buttonIconColor,
-                        ),
-                        label: Text(
-                          notifier.getLocalization?.downloadText ?? "Download",
-                          style: TextStyle(
-                            color: buttonTextColor,
-                          ),
-                        ),
-                        onPressed: notifier.downloadUpdate,
+                else if (!notifier.isDownloading && notifier.isDownloaded)
+                  TextButton.icon(
+                    icon: const Icon(Icons.restart_alt),
+                    label: Text(
+                      notifier.getLocalization?.restartText ?? "Restart",
+                      style: TextStyle(color: buttonTextColor),
+                    ),
+                    onPressed: notifier.restartApp,
+                  )
+                else ...[
+                  if (!notifier.isMandatory)
+                    TextButton.icon(
+                      icon: Icon(Icons.close, color: buttonIconColor),
+                      label: Text(
+                        notifier.getLocalization?.skipThisVersionText ??
+                            "Skip this version",
+                        style: TextStyle(color: buttonTextColor),
                       ),
-                    ],
+                      onPressed: notifier.makeSkipUpdate,
+                    ),
+                  TextButton.icon(
+                    icon: Icon(Icons.download, color: buttonIconColor),
+                    label: Text(
+                      notifier.getLocalization?.downloadText ?? "Download",
+                      style: TextStyle(color: buttonTextColor),
+                    ),
+                    onPressed: notifier.downloadUpdate,
                   ),
+                ],
               ],
             );
           },

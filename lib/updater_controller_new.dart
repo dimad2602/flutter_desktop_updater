@@ -55,6 +55,9 @@ class DesktopUpdaterControllerNew extends ChangeNotifier {
   double _downloadedSize = 0;
   double get downloadedSize => _downloadedSize;
 
+  bool _downloadError = false;
+bool get downloadError => _downloadError;
+
   List<FileHashModel?>? _changedFiles;
 
   List<ChangeModel?>? _releaseNotes;
@@ -159,6 +162,11 @@ class DesktopUpdaterControllerNew extends ChangeNotifier {
           notifyListeners();
           _emit();
         },
+        onError: (e) {
+          debugPrint("downloadUpdate stream error: $e");
+    _setDownloadError(e.toString());
+  },
+        cancelOnError: true,
       );
     } catch (e) {
       debugPrint("downloadUpdate error = $e");
@@ -168,6 +176,14 @@ class DesktopUpdaterControllerNew extends ChangeNotifier {
   void restartApp() {
     _plugin.restartApp();
   }
+
+  void _setDownloadError(String message) {
+  _downloadError = true;
+  _isDownloading = false;
+  _isDownloaded = false;
+  _emit();
+  debugPrint("Download failed: $message");
+}
 
   @override
   void dispose() {
